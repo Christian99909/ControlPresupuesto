@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ControlPresupuesto.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ControlPresupuesto.Controllers
 {
@@ -6,6 +7,14 @@ namespace ControlPresupuesto.Controllers
     {
         public IActionResult Crear() 
         {
+            return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult Crear(TipoCuenta tipoCuenta) 
+        {
+           
             return View();
 
         }
