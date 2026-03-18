@@ -1,8 +1,11 @@
-﻿namespace ControlPresupuesto.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ControlPresupuesto.Models
 {
     public class TipoCuenta
     {
         public int Id { get; set; }
+        [Required]
         public string Nombre { get; set; }
 
         public int UsuarioId { get; set; }
