@@ -60,8 +60,24 @@ namespace ControlPresupuesto.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id) 
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            var tipoCuenta = await repositorioTiposCuentas.ObtenerPorId(id, usuarioId);
 
+            if (tipoCuenta is null)
+            { 
+            
+                return RedirectToAction("NoEncontrado", "Home");
 
+            }
+
+            return View(tipoCuenta);
+
+        }
+
+        [HttpGet]
         public async Task<IActionResult> VerificarExisteTipoCuenta(string nombre) 
         
         {
