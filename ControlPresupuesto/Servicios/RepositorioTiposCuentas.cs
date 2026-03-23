@@ -49,5 +49,12 @@ namespace ControlPresupuesto.Servicios
             return await connection.QueryAsync<TipoCuenta>(@"SELECT Id, Nombre, Orden FROM TiposCuentas WHERE UsuarioId = @UsuarioId", new { usuarioId });
 
         }
+
+        public async Task Actualizar(TipoCuenta tipoCuenta) 
+        {
+        
+                using var connection = new SqlConnection(connectionString);
+                await connection.ExecuteAsync(@"UPDATE TiposCuentas SET Nombre = @Nombre WHERE Id = @Id", tipoCuenta);
+        }
     }
 }
