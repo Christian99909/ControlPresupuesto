@@ -27,6 +27,7 @@
             <tr>
                 
                 <td>
+                    <input type="hidden" value="@tipoCuenta.Id" class="ids"/>
                     <a asp-action="Editar" asp-route-id="@tipoCuenta.Id" class="btn btn-secondary">Editar</a>
                     <a asp-action="Borrar" asp-route-id="@tipoCuenta.Id" class="btn btn-danger">Borrar</a>
                 </td>
@@ -37,11 +38,60 @@
 </table>
 
 
-@section Scripts{ <script>
-    $( function(){
+@section Scripts{ 
     
-        $("#reordenable").sortable();
-    
-    })
-</script>
+    <script>
+
+        const urlOrdenar = '@Url.Action("ordenar")';
+
+        $( function(){
+            $("#reordenable").sortable({
+            
+                stop: async function(e, ui){
+
+                   await actualizarOrdenes();
+                
+                }
+
+            });
+
+            async function actualizarOrdenes(){
+            
+                const ids = obtenerIdsDeElementos();
+
+               await enviarIdsAlBackend(ids);
+
+            }
+
+            function obtenerIdsDeElementos(){
+            
+                const ids = $(".ids").map(function(){
+                
+                    return $(this).val();
+                }).get();
+
+                return ids;
+
+            }
+
+
+           async function enviarIdsAlBackend(ids){
+            
+                var data = JSON.stringify(ids);
+
+                await fetch(urlOrdenar, {
+                
+                    method: 'POST',
+                    body: data,
+                    headers: {
+                    
+                        'content-Type': 'application/json'
+                    
+                    }
+                
+                });
+            
+            }
+        })
+    </script>
 }
