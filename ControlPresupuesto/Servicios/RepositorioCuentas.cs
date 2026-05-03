@@ -9,6 +9,7 @@ namespace ControlPresupuesto.Servicios
     {
         Task<IEnumerable<Cuenta>> Buscar(int usuarioId);
         Task Crear(Cuenta cuenta);
+        Task<Cuenta> ObtenerPorId(int id, int usuarioId);
     }
     public class RepositorioCuentas: IRepositorioCuentas
     {
@@ -36,6 +37,15 @@ namespace ControlPresupuesto.Servicios
                                                         ON tc.Id = Cuentas.TipoCuentaId 
                                                         WHERE tc.UsuarioId = @UsuarioId 
                                                         ORDER BY tc.Orden", new {usuarioId});
+        }
+
+        public async Task<Cuenta> ObtenerPorId(int id, int usuarioId)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.QueryFirstOrDefaultAsync<Cuenta>(@"SELECT Cuentas.Id, Cuentas.Nombre, Balance, Descripcion, tc.Id 
+                                                        FROM Cuentas INNER JOIN TiposCuentas tc 
+                                                        ON tc.Id = Cuentas.TipoCuentaId 
+                                                        WHERE tc.UsuarioId = @UsuarioId AND Cuentas.Id = @Id", new { id, usuarioId });
         }
 
     }
