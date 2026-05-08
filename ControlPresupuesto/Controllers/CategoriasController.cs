@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ControlPresupuesto.Controllers
 {
-    public class CategoriaController: Controller
+    public class CategoriasController: Controller
     {
         private readonly IRepositorioCategorias repositorioCategorias;
         private readonly IServicioUsuarios servicioUsuarios;
 
-        public CategoriaController(IRepositorioCategorias repositorioCategorias, IServicioUsuarios servicioUsuarios)
+        public CategoriasController(IRepositorioCategorias repositorioCategorias, IServicioUsuarios servicioUsuarios)
         {
             this.repositorioCategorias = repositorioCategorias;
             this.servicioUsuarios = servicioUsuarios;
