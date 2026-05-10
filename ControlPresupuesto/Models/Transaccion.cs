@@ -6,6 +6,8 @@ namespace ControlPresupuesto.Models
     {
         public int Id { get; set; }
         public decimal Monto { get; set; }
+        [Display(Name = "Fecha de Transacción")]
+        [DataType(DataType.Date)]
         public DateTime FechaTransaccion { get; set; } = DateTime.Today;
         [StringLength(1000, ErrorMessage = "La nota no puede exceder los {1} caracteres")]
         public string Nota { get; set; }
