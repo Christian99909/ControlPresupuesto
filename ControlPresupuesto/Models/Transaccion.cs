@@ -12,9 +12,12 @@ namespace ControlPresupuesto.Models
         [StringLength(1000, ErrorMessage = "La nota no puede exceder los {1} caracteres")]
         public string Nota { get; set; }
         [Range(1, maximum: int.MaxValue, ErrorMessage = "Debe seleccionar una categoría")]
+        [Display(Name = "Categoría")]
         public int CategoriaId { get; set; }
+       
         public int UsuarioId { get; set; }
         [Range(1, maximum: int.MaxValue, ErrorMessage = "Debe seleccionar una cuenta")]
+        [Display(Name = "Cuenta")]
         public int CuentaId { get; set; }   
 
     }
