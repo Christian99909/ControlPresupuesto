@@ -34,7 +34,7 @@ namespace ControlPresupuesto.Servicios
         public async Task Actualzar(Transaccion transaccion, decimal montoAnterior, int cuentaAnteriorId) 
         {
             using var connection = new SqlConnection(connectionString);
-            await connection.ExecuteAsync("Transacciones_Acutalizar", 
+            await connection.ExecuteAsync("Transacciones_Actualizar", 
                 new {
 
                     transaccion.Id,
