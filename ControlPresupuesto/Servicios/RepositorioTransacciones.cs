@@ -31,7 +31,7 @@ namespace ControlPresupuesto.Servicios
             transaccion.Id = id;
         }
 
-        public async Task Actualzar(Transaccion transaccion, decimal montoAnterior, int cuentaAnterior) 
+        public async Task Actualzar(Transaccion transaccion, decimal montoAnterior, int cuentaAnteriorId) 
         {
             using var connection = new SqlConnection(connectionString);
             await connection.ExecuteAsync("Transacciones_Acutalizar", 
@@ -44,7 +44,7 @@ namespace ControlPresupuesto.Servicios
                     transaccion.CuentaId,
                     transaccion.Nota,
                     montoAnterior,
-                    cuentaAnterior
+                    cuentaAnteriorId
                 }, commandType: System.Data.CommandType.StoredProcedure);
         }
 
