@@ -39,7 +39,7 @@ namespace ControlPresupuesto.Controllers
             return View(modelo);
         }
 
-        public async Task<IActionResult> Detalles(int id, int mes, int año) 
+        public async Task<IActionResult> Detalle(int id, int mes, int año) 
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
             var cuenta = await repositorioCuentas.ObtenerPorId(id, usuarioId);
@@ -96,6 +96,11 @@ namespace ControlPresupuesto.Controllers
             modelo.TransaccionesAgrupadas = trnasaccionesPorFecha; 
             modelo.FechaInicio = fechaInicio;
             modelo.FechaFin = fechaFin;
+
+            ViewBag.MesAnterior = fechaInicio.AddMonths(-1).Month;
+            ViewBag.AñoAnterior = fechaInicio.AddMonths(-1).Year;
+            ViewBag.MesPosterior = fechaInicio.AddMonths(1).Month;
+            ViewBag.AñoPosterior = fechaInicio.AddMonths(1).Year;
 
             return View(modelo);
 
