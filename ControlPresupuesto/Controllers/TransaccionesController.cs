@@ -4,6 +4,7 @@ using ControlPresupuesto.Servicios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ControlPresupuesto.Controllers
 {
@@ -25,10 +26,63 @@ namespace ControlPresupuesto.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index() 
+        public  async Task<IActionResult> Index(int mes, int año) 
         {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
 
-            return View();
+            DateTime fechaInicio;
+            DateTime fechaFin;
+
+
+            if (mes <= 0 || mes > 12 || año <= 1900)
+            {
+
+                var hoy = DateTime.Today;
+                fechaInicio = new DateTime(hoy.Year, hoy.Month, 1);
+
+            }
+            else
+            {
+
+                fechaInicio = new DateTime(año, mes, 1);
+
+            }
+
+            fechaFin = fechaInicio.AddMonths(1).AddDays(-1);
+
+            var parametro = new ParametroObtenerTransaccionesPorUsuario()
+            {
+
+                UsuarioId = usuarioId,
+                FechaInicio = fechaInicio,
+                FechaFin = fechaFin
+
+            };
+
+            var transacciones = await repositorioTransacciones.ObtenerPorUsuarioId(parametro);
+
+            var modelo = new ReporteTransaccionesDetalladas();
+            
+
+            var trnasaccionesPorFecha = transacciones.OrderByDescending( x => x.FechaTransaccion).GroupBy(x => x.FechaTransaccion)
+                .Select(grupo => new ReporteTransaccionesDetalladas.TransaccionesPorFecha()
+                {
+                    FechaTransaccion = grupo.Key,
+                    Transacciones = grupo.AsEnumerable()
+
+                });
+
+            modelo.TransaccionesAgrupadas = trnasaccionesPorFecha;
+            modelo.FechaInicio = fechaInicio;
+            modelo.FechaFin = fechaFin;
+
+            ViewBag.MesAnterior = fechaInicio.AddMonths(-1).Month;
+            ViewBag.AñoAnterior = fechaInicio.AddMonths(-1).Year;
+            ViewBag.MesPosterior = fechaInicio.AddMonths(1).Month;
+            ViewBag.AñoPosterior = fechaInicio.AddMonths(1).Year;
+            ViewBag.urlRetorno = HttpContext.Request.Path + HttpContext.Request.QueryString;
+
+            return View(modelo);
 
         }
 
