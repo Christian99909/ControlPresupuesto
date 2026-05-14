@@ -3,6 +3,7 @@ using ControlPresupuesto.Models;
 using ControlPresupuesto.Servicios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Reflection;
 
 namespace ControlPresupuesto.Controllers
 {
@@ -84,7 +85,7 @@ namespace ControlPresupuesto.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Editar(int id) 
+        public async Task<IActionResult> Editar(int id, string urlRetorno = null) 
         {
 
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
@@ -109,7 +110,7 @@ namespace ControlPresupuesto.Controllers
             modelo.CuentaAnteriorId = transaccion.CuentaId;
             modelo.Categorias = await ObtenerCategorias(usuarioId, modelo.TipoOperacionId);
             modelo.Cuentas = await ObtenerCuentas(usuarioId);
-
+            modelo.UrlRetorno = urlRetorno;
             return View(modelo);
 
 
@@ -153,12 +154,23 @@ namespace ControlPresupuesto.Controllers
 
             await repositorioTransacciones.Actualzar(transaccion, modelo.MontoAnterior, modelo.CuentaAnteriorId);
 
-            return RedirectToAction("Index");
+            if ( string.IsNullOrEmpty(modelo.UrlRetorno))
+            {
+                return RedirectToAction("Index");
+            }
+            else 
+            {
+
+                return LocalRedirect(modelo.UrlRetorno);
+
+            }
+
+                
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> Borrar(int id) 
+        public async Task<IActionResult> Borrar(int id, string urlRetorno = null) 
         {
 
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
@@ -173,7 +185,17 @@ namespace ControlPresupuesto.Controllers
             }
 
             await repositorioTransacciones.Borrar(id);
-            return RedirectToAction("Index");
+
+            if (string.IsNullOrEmpty(urlRetorno))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+
+                return LocalRedirect(urlRetorno);
+
+            }
 
         }
 
