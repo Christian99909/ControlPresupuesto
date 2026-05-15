@@ -5,6 +5,7 @@ namespace ControlPresupuesto.Servicios
 
     public interface IServicioReportes
     {
+        Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerReporteSemanal(int usuarioId, int mes, int año, dynamic ViewBag);
         Task<ReporteTransaccionesDetalladas> ObtenerReporteTransaccionesDetalladas(int usuarioId, int mes, int año, dynamic ViewBag);
         Task<ReporteTransaccionesDetalladas> ObtenerReporteTransaccionesDetalladasPorCuenta(int usuarioId, int cuentaId, int mes, int año, dynamic ViewBag);
     }
@@ -18,6 +19,31 @@ namespace ControlPresupuesto.Servicios
             this.httpContext = httpContextAccessor.HttpContext;
         }
 
+
+
+
+        public async Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerReporteSemanal(int usuarioId, int mes, int año, dynamic ViewBag) 
+        {
+
+            (DateTime fechaInicio, DateTime fechaFin) = GenerarFechaInicioYFin(mes, año);
+
+            var parametro = new ParametroObtenerTransaccionesPorUsuario()
+            {
+
+                UsuarioId = usuarioId,
+                FechaInicio = fechaInicio,
+                FechaFin = fechaFin
+
+            };
+
+            AsignarValoresAlViewBag(ViewBag, fechaInicio);
+
+            var modelo = await repositorioTransacciones.ObtenerPorSemana(parametro);
+
+            return modelo;
+
+
+        }
 
 
         public async Task<ReporteTransaccionesDetalladas> ObtenerReporteTransaccionesDetalladas(int usuarioId, int mes, int año, dynamic ViewBag) 
