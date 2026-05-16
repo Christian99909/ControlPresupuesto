@@ -95,9 +95,10 @@ namespace ControlPresupuesto.Servicios
                                                                             SUM(Monto) as Monto, cat.TipoOperacionId
                                                                             FROM Transacciones
                                                                             INNER JOIN Categorias cat
-                                                                            ON ca.Id = Transacciones.CategoriaId
+                                                                            ON cat.Id = Transacciones.CategoriaId
                                                                             WHERE Transacciones.UsuarioId = @usuarioId AND 
-                                                                            FechaTransaccion BETWEEN @fechaInicio, FechaTransaccion) / 7, cat.TipoOperacionId", modelo);
+                                                                            FechaTransaccion BETWEEN @fechaInicio and @fechaFin
+                                                                            GROUP BY datediff(d, @fechaInicio, FechaTransaccion) / 7, cat.TipoOperacionId", modelo);
 
         }
 
